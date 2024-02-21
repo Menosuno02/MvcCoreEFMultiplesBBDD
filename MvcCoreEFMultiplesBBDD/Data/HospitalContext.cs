@@ -3,9 +3,9 @@ using MvcCoreEFMultiplesBBDD.Models;
 
 namespace MvcCoreEFMultiplesBBDD.Data
 {
-    public class EmpleadoContext : DbContext
+    public class HospitalContext : DbContext
     {
-        public EmpleadoContext(DbContextOptions<EmpleadoContext> options)
+        public HospitalContext(DbContextOptions<HospitalContext> options)
             : base(options) { }
 
         public DbSet<Empleado> Empleados { get; set; }

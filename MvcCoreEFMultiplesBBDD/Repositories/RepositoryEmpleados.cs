@@ -8,7 +8,7 @@ using MvcCoreEFMultiplesBBDD.Models;
 /*
 CREATE OR ALTER VIEW v_empleados
 AS
-	SELECT EMP.EMP_NO, EMP.APELLIDO, EMP.OFICIO,
+	SELECT ISNULL(EMP.EMP_NO, 0) AS EMP_NO, EMP.APELLIDO, EMP.OFICIO,
 	EMP.SALARIO, DEPT.DEPT_NO, DEPT.DNOMBRE, DEPT.LOC
 	FROM EMP
 	INNER JOIN DEPT
@@ -30,14 +30,14 @@ namespace MvcCoreEFMultiplesBBDD.Repositories
 {
     public class RepositoryEmpleados
     {
-        private EmpleadoContext context;
+        private HospitalContext context;
 
-        public RepositoryEmpleados(EmpleadoContext context)
+        public RepositoryEmpleados(HospitalContext context)
         {
             this.context = context;
         }
 
-        public async Task<List<Empleado>> GetEmpleados()
+        public async Task<List<Empleado>> GetEmpleadosAsync()
         {
             var consulta = from datos in this.context.Empleados
                            select datos;
@@ -45,20 +45,18 @@ namespace MvcCoreEFMultiplesBBDD.Repositories
             return empleados;
         }
 
-        public async Task<Empleado> FindEmpleado(int id)
+        public async Task<Empleado> FindEmpleadoAsync(int id)
         {
             /*
             string sql = "SP_FIND_VEMPLEADO @EMPNO";
             SqlParameter paramEmpNo = new SqlParameter("@EMPNO", id);
             var consulta = this.context.Empleados.FromSqlRaw(sql, paramEmpNo);
-            List<Empleado> empleados = await consulta.ToListAsync();
-            return empleados.FirstOrDefault();
+            return await consulta.FirstOrDefaultAsync();
             */
             var consulta = from datos in this.context.Empleados
                            where datos.EmpNo == id
                            select datos;
-            List<Empleado> empleados = await consulta.ToListAsync();
-            return empleados.FirstOrDefault();
+            return await consulta.FirstOrDefaultAsync();
         }
     }
 }

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MvcCoreEFMultiplesBBDD.Data;
 using MvcCoreEFMultiplesBBDD.Models;
 
-#region PROCEDIMIENTOS ALMACENADOS
+#region VIEWS Y PROCEDIMIENTOS
 
 /*
 CREATE OR ALTER VIEW v_empleados
@@ -15,12 +15,10 @@ AS
 	ON EMP.DEPT_NO = DEPT.DEPT_NO
 GO
 
-CREATE OR ALTER PROCEDURE SP_FIND_VEMPLEADO
-(@EMP_NO INT)
+CREATE OR ALTER PROCEDURE SP_ALL_EMPLEADOS
 AS
 	SELECT *
 	FROM v_empleados
-	WHERE EMP_NO = @EMP_NO
 GO
 */
 
@@ -28,7 +26,7 @@ GO
 
 namespace MvcCoreEFMultiplesBBDD.Repositories
 {
-    public class RepositoryEmpleados
+    public class RepositoryEmpleados : IRepositoryEmpleados
     {
         private HospitalContext context;
 
@@ -37,24 +35,23 @@ namespace MvcCoreEFMultiplesBBDD.Repositories
             this.context = context;
         }
 
-        public async Task<List<Empleado>> GetEmpleadosAsync()
-        {
-            var consulta = from datos in this.context.Empleados
-                           select datos;
-            List<Empleado> empleados = await consulta.ToListAsync();
-            return empleados;
-        }
-
-        public async Task<Empleado> FindEmpleadoAsync(int id)
+        public async Task<List<EmpleadoView>> GetEmpleadosAsync()
         {
             /*
-            string sql = "SP_FIND_VEMPLEADO @EMPNO";
-            SqlParameter paramEmpNo = new SqlParameter("@EMPNO", id);
-            var consulta = this.context.Empleados.FromSqlRaw(sql, paramEmpNo);
-            return await consulta.FirstOrDefaultAsync();
-            */
             var consulta = from datos in this.context.Empleados
-                           where datos.EmpNo == id
+                           select datos;
+            List<EmpleadoView> empleados = await consulta.ToListAsync();
+            return empleados;
+            */
+            string sql = "SP_ALL_EMPLEADOS";
+            var consulta = this.context.Empleados.FromSqlRaw(sql);
+            return await consulta.ToListAsync();
+        }
+
+        public async Task<EmpleadoView> FindEmpleadoAsync(int idEmpleado)
+        {
+            var consulta = from datos in this.context.Empleados
+                           where datos.EmpNo == idEmpleado
                            select datos;
             return await consulta.FirstOrDefaultAsync();
         }

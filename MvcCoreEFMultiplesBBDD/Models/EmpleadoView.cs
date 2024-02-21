@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MvcCoreEFMultiplesBBDD.Models
 {
-    [Table("v_empleados")]
-    public class Empleado
+    [Table("V_EMPLEADOS")]
+    public class EmpleadoView
     {
         [Key]
         [Column("EMP_NO")]

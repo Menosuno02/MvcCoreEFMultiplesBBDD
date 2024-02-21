@@ -6,22 +6,22 @@ namespace MvcCoreEFMultiplesBBDD.Controllers
 {
     public class EmpleadosController : Controller
     {
-        private RepositoryEmpleados repo;
+        private IRepositoryEmpleados repo;
 
-        public EmpleadosController(RepositoryEmpleados repo)
+        public EmpleadosController(IRepositoryEmpleados repo)
         {
             this.repo = repo;
         }
 
         public async Task<IActionResult> Index()
         {
-            List<Empleado> empleados = await this.repo.GetEmpleados();
+            List<EmpleadoView> empleados = await this.repo.GetEmpleadosAsync();
             return View(empleados);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            Empleado empleado = await this.repo.FindEmpleado(id);
+            EmpleadoView empleado = await this.repo.FindEmpleadoAsync(id);
             return View(empleado);
         }
     }

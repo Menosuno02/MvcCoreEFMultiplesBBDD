@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MvcCoreEFMultiplesBBDD.Models.Empleado>
+﻿@model IEnumerable<MvcCoreEFMultiplesBBDD.Models.EmpleadoView>
 
 @{
     ViewData["Title"] = "Index";
@@ -62,9 +62,7 @@
                     @Html.DisplayFor(modelItem => item.Localidad)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.EmpNo }) |
-                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    <a asp-controller="Empleados" asp-action="Details" asp-route-id="@item.EmpNo" class="btn btn-success btn-sm">Details</a>
                 </td>
             </tr>
         }

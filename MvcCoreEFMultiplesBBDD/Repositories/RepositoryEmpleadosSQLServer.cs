@@ -20,17 +20,25 @@ AS
 	SELECT *
 	FROM v_empleados
 GO
+
+CREATE OR ALTER PROCEDURE SP_DETAILS_EMPLEADO
+(@IDEMPLEADO INT)
+AS
+	SELECT *
+	FROM v_empleados
+	WHERE EMP_NO = @IDEMPLEADO
+GO
 */
 
 #endregion
 
 namespace MvcCoreEFMultiplesBBDD.Repositories
 {
-    public class RepositoryEmpleados : IRepositoryEmpleados
+    public class RepositoryEmpleadosSQLServer : IRepositoryEmpleados
     {
         private HospitalContext context;
 
-        public RepositoryEmpleados(HospitalContext context)
+        public RepositoryEmpleadosSQLServer(HospitalContext context)
         {
             this.context = context;
         }
@@ -44,16 +52,23 @@ namespace MvcCoreEFMultiplesBBDD.Repositories
             return empleados;
             */
             string sql = "SP_ALL_EMPLEADOS";
-            var consulta = this.context.Empleados.FromSqlRaw(sql);
+            var consulta = this.context.EmpleadosView.FromSqlRaw(sql);
             return await consulta.ToListAsync();
         }
 
         public async Task<EmpleadoView> FindEmpleadoAsync(int idEmpleado)
         {
+            /*
             var consulta = from datos in this.context.Empleados
                            where datos.EmpNo == idEmpleado
                            select datos;
             return await consulta.FirstOrDefaultAsync();
+            */
+            string sql = "SP_DETAILS_EMPLEADO @IDEMPLEADO";
+            SqlParameter paramId = new SqlParameter("@IDEMPLEADO", idEmpleado);
+            var consulta = this.context.EmpleadosView.FromSqlRaw(sql, paramId);
+            EmpleadoView empleado = consulta.AsEnumerable().FirstOrDefault();
+            return empleado;
         }
     }
 }

@@ -7,13 +7,31 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-//string connectionString = builder.Configuration.GetConnectionString("SqlServerHospital");
+// SQLSERVER CONNECTION
+/*
+string connectionString = builder.Configuration.GetConnectionString("SqlServerHospital");
+builder.Services.AddTransient<IRepositoryEmpleados, RepositoryEmpleadosSQLServer>();
+builder.Services.AddDbContext<HospitalContext>
+    (options => options.UseSqlServer(connectionString));
+*/
+
+// ORACLE CONNECTION
+/*
 string connectionString = builder.Configuration.GetConnectionString("OracleHospital");
-// builder.Services.AddTransient<IRepositoryEmpleados, RepositoryEmpleados>();
 builder.Services.AddTransient<IRepositoryEmpleados, RepositoryEmpleadosOracle>();
 builder.Services.AddDbContext<HospitalContext>
-//    (options => options.UseSqlServer(connectionString));
-        (options => options.UseOracle(connectionString, options => options.UseOracleSQLCompatibility("11")));
+        (options => options.UseOracle(connectionString,
+        options => options.UseOracleSQLCompatibility("11")));
+*/
+
+// MYSQL CONNECTION
+string connectionString = builder.Configuration.GetConnectionString("MySqlHospital");
+builder.Services.AddTransient<IRepositoryEmpleados, RepositoryEmpleadosMySql>();
+// En vez de usar AddDbContext se usa AddDbContextPool
+builder.Services.AddDbContextPool<HospitalContext>
+    (options => options.UseMySql(connectionString,
+    ServerVersion.AutoDetect(connectionString)));
+
 
 var app = builder.Build();
 

@@ -8,6 +8,6 @@ namespace MvcCoreEFMultiplesBBDD.Data
         public HospitalContext(DbContextOptions<HospitalContext> options)
             : base(options) { }
 
-        public DbSet<EmpleadoView> Empleados { get; set; }
+        public DbSet<EmpleadoView> EmpleadosView { get; set; }
     }
 }
